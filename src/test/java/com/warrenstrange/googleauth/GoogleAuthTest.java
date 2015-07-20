@@ -38,7 +38,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * Not really a unit test, but it shows the basic usage of this package.
@@ -158,8 +158,24 @@ public class GoogleAuthTest {
         GoogleAuthenticator ga = new GoogleAuthenticator(gacb.build());
 
         boolean isCodeValid = ga.authorize(SECRET_KEY, VALIDATION_CODE);
-
+        
+        assertTrue("Mocked authorization should be successful.", isCodeValid );
         System.out.println("Check VALIDATION_CODE = " + isCodeValid);
+    }
+    
+    @Test
+    public void authoriseRealSharedKeyAndVerificationCode() {
+    	
+        GoogleAuthenticator ga = new GoogleAuthenticator();
+        GoogleAuthenticatorKey key = ga.createCredentials();
+
+        boolean isCodeValid = ga.authorize(
+        		key.getKey(),
+        		key.getVerificationCode()
+        );
+        
+        assertTrue("Real user authorization should be successful.", isCodeValid );
+        System.out.println("Check dynamic verification code = " + isCodeValid);
     }
 
     @Test
@@ -172,7 +188,8 @@ public class GoogleAuthTest {
         GoogleAuthenticator ga = new GoogleAuthenticator(gacb.build());
 
         boolean isCodeValid = ga.authorizeUser("testName", VALIDATION_CODE);
-
+        
+        assertTrue("Mocked user authorization should be successful.", isCodeValid );
         System.out.println("Check VALIDATION_CODE = " + isCodeValid);
     }
 }
